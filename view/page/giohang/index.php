@@ -1,244 +1,239 @@
+<?php
 
+// Xử lý xóa sản phẩm khỏi giỏ hàng
+if (isset($_GET['action']) && $_GET['action'] === 'remove') {
+    $productId = (int)$_GET['product_id']; // Lấy ID sản phẩm từ GET
+
+    // Kiểm tra nếu giỏ hàng và sản phẩm tồn tại
+    if (isset($_SESSION['cart'][$productId])) {
+        unset($_SESSION['cart'][$productId]); // Xóa sản phẩm khỏi giỏ hàng
+    }
+
+    // Chuyển hướng về giỏ hàng sau khi xóa
+    header("Location: index.php?page=giohang");
+    exit();
+}
+
+// Cập nhật số lượng sản phẩm trong giỏ hàng
+if (isset($_POST['action']) && $_POST['action'] === 'update_quantity') {
+    $productId = $_POST['product_id'];
+    $newQuantity = (int)$_POST['quantity'];
+
+    // Kiểm tra nếu số lượng hợp lệ
+    if ($newQuantity > 0) {
+        $_SESSION['cart'][$productId]['quantity'] = $newQuantity;
+    }
+
+    // Chuyển hướng lại giỏ hàng sau khi cập nhật
+    header("Location: index.php?page=giohang");
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
     <style>
-        body {
-            background-color: #ececec;
-            color: #fff;
-            font-family: Arial, sans-serif;
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .header {
-            
-            padding: 10px;
-        }
-
-        .header a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .product-card {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            color: #000000;
-        }
-
-        .product-card img {
-            width: 100px;
-            height: 100px;
-        }
-
-        .product-card .product-info {
+        /* Giỏ hàng container */
+        .cart-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .product-card .product-info .details {
-            flex: 1;
-            margin-left: 15px;
+        /* Tiêu đề */
+        .cart-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            text-transform: uppercase;
         }
 
-        .product-card .product-info .price {
-            text-align: right;
+        /* Bảng giỏ hàng */
+        .cart-table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .product-card .product-info .price del {
-            color: #888;
+        .cart-table th, .cart-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
         }
 
-        .total-section {
-            background-color: lightgray;
-            padding: 15px;
-            margin-top: 10px;
-            color: #000000;
-
+        .cart-table th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
         }
 
-        .total-section .total-info {
-            display: flex;
-            justify-content: space-between;
-            
+        .cart-table td {
+            background-color: #fff;
         }
 
-        .total-section .total-info .total-price {
-            color: #ff424e;
-            font-size: 1.2em;
-            color: black;
+        /* Hình ảnh sản phẩm */
+        .product-image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
         }
 
-        .btn-buy {
-            background-color: #ff424e;
-            color: #fff;
+        /* Nút số lượng */
+        .quantity-btn {
+            padding: 6px 10px;
+            background-color: #3498db;
+            color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .quantity-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .quantity-display {
+            margin: 0 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Nút xóa */
+        .btn-remove {
+            padding: 6px 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 12px;
+        }
+
+        .btn-remove:hover {
+            background-color: #c0392b;
+        }
+
+        /* Tổng giá */
+        .total-price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 18px;
+            width: 100%;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Nút thanh toán */
+        .btn-checkout {
+            padding: 8px 18px;
+            background-color: #f39c12;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-checkout:hover {
+            background-color: #e67e22;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 16px;
+            color: #e74c3c;
+            margin-top: 40px;
         }
     </style>
+</head>
+<body>
+    <div class="cart-container">
+        <?php if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
+            <h2 class="cart-title">Giỏ hàng của bạn</h2>
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($_SESSION['cart'] as $productId => $product): ?>
+                        <?php $totalProductPrice = number_format($product['price'] * $product['quantity'], 0, ',', '.') . " VNĐ"; ?>
+                        <tr>
+                            <td><img src="img/Monan/<?= $product['image']; ?>" alt="<?= $product['name']; ?>" class="product-image"></td>
+                            <td><?= $product['name']; ?></td>
+                            <td><?= $totalProductPrice; ?></td>
+                            <td>
+                                <form action="index.php?page=giohang" method="post">
+                                    <input type="hidden" name="action" value="update_quantity">
+                                    <input type="hidden" name="product_id" value="<?= $productId; ?>">
+                                    <button type="submit" name="quantity" value="<?= $product['quantity'] - 1; ?>" class="quantity-btn" <?= $product['quantity'] <= 1 ? 'disabled' : ''; ?>>-</button>
+                                    <span class="quantity-display"><?= $product['quantity']; ?></span>
+                                    <button type="submit" name="quantity" value="<?= $product['quantity'] + 1; ?>" class="quantity-btn">+</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="index.php" method="get">
+                                    <input type="hidden" name="page" value="giohang">
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="product_id" value="<?= $productId; ?>">
+                                    <button type="submit" class="btn-remove">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php
+            $totalPrice = array_sum(array_map(function ($product) {
+                return $product['price'] * $product['quantity'];
+            }, $_SESSION['cart']));
+            ?>
+            <div class="total-price-container">
+                <div class="total-price">Tổng cộng: <?= number_format($totalPrice, 0, ',', '.'); ?> VNĐ</div>
+                <a href="index.php?page=giohang/thanhtoan/" class="btn-checkout">Thanh toán</a>
 
-
-
-    
-
-    <body>
-        <h1 style="color: #000000; text-align: center; margin-top: 10px; ">GIỎ HÀNG</h1>
-        <div class="container mt-3">
-            <div class="product-card">
-                <div class="product-info">
-                    <input checked="" style="width: 30px; margin-right: 10px;" type="checkbox" />
-                    <img alt="Product image of a pepperoni pizza" height="100"
-                        src="https://storage.googleapis.com/a1aa/image/BHf1zDM1FaXfYEflCtrOCHL4swSkSYDHkTx86zfuDefOn856E.jpg"
-                        width="100" />
-                    <div class="details">
-                        <p>
-                            Pizza Pepperoni
-                        </p>
-                        <p>
-                            Size: Large
-                        </p>
-                        <p>
-                            Đổi trả 15 ngày
-                        </p>
-                    </div>
-                    <div class="price">
-                        <del>
-                            ₫300.000
-                        </del>
-                        <p>
-                            ₫215.000
-                        </p>
-                        <div class="quantity">
-                            <button class="btn btn-sm btn-outline-light">
-                                -
-                            </button>
-                            <span>
-                                1
-                            </span>
-                            <button class="btn btn-sm btn-outline-light">
-                                +
-                            </button>
-                        </div>
-                        <p>
-                            Còn 2 sản phẩm
-                        </p>
-                    </div>
-                    <a class="text-danger" href="#">
-                        Xóa
-                    </a>
-                </div>
             </div>
-            <div class="product-card">
-                <div class="product-info">
-                    <input checked="" style="width: 30px; margin-right: 10px;" type="checkbox" />
-                    <img alt="Product image of a margherita pizza" height="100"
-                        src="https://storage.googleapis.com/a1aa/image/dmf3KdtUIXWKfEDNHwdjBjbIQTY3vQGfAWDpcNAm73h0kPXnA.jpg"
-                        width="100" />
-                    <div class="details">
-                        <p>
-                            Pizza Margherita
-                        </p>
-                        <p>
-                            Size: Medium
-                        </p>
-                        <p>
-                            Đổi trả 15 ngày
-                        </p>
-                    </div>
-                    <div class="price">
-                        <del>
-                            ₫150.000
-                        </del>
-                        <p>
-                            ₫120.000
-                        </p>
-                        <div class="quantity">
-                            <button class="btn btn-sm btn-outline-light">
-                                -
-                            </button>
-                            <span>
-                                1
-                            </span>
-                            <button class="btn btn-sm btn-outline-light">
-                                +
-                            </button>
-                        </div>
-                        <p>
-                            Còn 5 sản phẩm
-                        </p>
-                    </div>
-                    <a class="text-danger" href="#">
-                        Xóa
-                    </a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-info">
-                    <input checked="" style="width: 30px; margin-right: 10px;" type="checkbox" />
-                    <img alt="Product image of a veggie pizza" height="100"
-                        src="https://storage.googleapis.com/a1aa/image/Gw7S2JSHenSqfEOVt4efvRJQ2tPNd5dGKRDFr2DMduxlJfcdC.jpg"
-                        width="100" />
-                    <div class="details">
-                        <p>
-                            Pizza Veggie
-                        </p>
-                        <p>
-                            Size: Large
-                        </p>
-                        <p>
-                            Đổi trả 15 ngày
-                        </p>
-                    </div>
-                    <div class="price">
-                        <del>
-                            ₫500.000
-                        </del>
-                        <p>
-                            ₫450.000
-                        </p>
-                        <div class="quantity">
-                            <button class="btn btn-sm btn-outline-light">
-                                -
-                            </button>
-                            <span>
-                                1
-                            </span>
-                            <button class="btn btn-sm btn-outline-light">
-                                +
-                            </button>
-                        </div>
-                        <p>
-                            Còn 3 sản phẩm
-                        </p>
-                    </div>
-                    <a class="text-danger" href="#">
-                        Xóa
-                    </a>
-                </div>
-            </div>
-            <div class="total-section">
-                <div class="total-info">
-                    <div>
-                        <input checked="" style="width: 30px; margin-right: 10px;" type="checkbox" />
-                        Chọn Tất Cả (3)
-                        
-                        
-                    </div>
-                    <div class="total-price">
-                        <p>
-                            Tổng thanh toán (3 Sản phẩm): ₫785.250
-                        </p>
-                        <p>
-                            Tiết kiệm ₫95,75k
-                        </p>
-                    </div>
-                    <a href="index.php?page=giohang/thanhtoan">
-                        <button class="btn-buy">
-                            Mua Hàng
-                        </button>
-                    </a>
-                    
-                </div>
-            </div>
-        </div>
-    </body>
-  
-  
+        <?php else: ?>
+            <p class="empty-cart">Giỏ hàng của bạn đang trống.</p>
+        <?php endif; ?>
+    </div>
+</body>
+</html>

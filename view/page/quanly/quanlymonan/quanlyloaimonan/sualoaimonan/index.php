@@ -1,53 +1,86 @@
+<?php
+include_once("controller/cloaimonan.php");
+
+$cLoaiMonAn = new CLoaiMonAn();
+if (isset($_GET['maloai'])) {
+    $maloai = $_GET['maloai'];
+    $loaiMonAn = $cLoaiMonAn->getLoaiMonAnById($maloai);
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tenLoai = $_POST['TenLoaiMonAn'];
+    $tinhTrang = $_POST['TinhTrangMonAn'];
+    $result = $cLoaiMonAn->updateLoaiMonAn($maloai, $tenLoai, $tinhTrang);
+    if ($result) {
+        echo "<script>alert('Cập nhật thành công!'); window.location.href='index.php?page=quanly/quanlymonan/quanlyloaimonan';</script>";
+    } else {
+        echo "<script>alert('Cập nhật thất bại!');</script>";
+    }
+}
+?>
+
 <body>
-        <div class="container qlnl">
-            <h1 class="d-flex justify-content-center py-3 font-weight-bold">SỬA THÔNG TIN LOẠI MÓN ĂN</h1>
-            <div class=" row">
-                <div class="suanl-left col-9">
-                    <div class="form-group row py-2">
-                        <label for="" class="col-sm-2 col-form-label">Tên Nguyên Liệu</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="" placeholder="Burger">
+    <div class="container py-4">
+        <h1 class="text-center font-weight-bold mb-4">SỬA LOẠI MÓN ĂN</h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" class="p-3">
+                    <div class="form-group row mb-3">
+                        <label for="TenLoaiMonAn" class="col-sm-4 col-form-label text-right font-weight-bold">Tên Loại Món Ăn</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="TenLoaiMonAn" id="TenLoaiMonAn" class="form-control" value="<?php echo $loaiMonAn['TenLoaiMonAn']; ?>" required>
                         </div>
                     </div>
 
-                    <div class="form-group row py-2">
-                        <label for="" class="col-sm-2 col-form-label">Tình Trạng</label>
-                        <div class="col-sm-5">
-                            <select class="form-select form-select" style="width: 50%;">
-                                <option value="1">Có</option>
-                                <option value="2">Chưa sẵn sàng</option>
-                              </select>
+                    <div class="form-group row mb-4">
+                        <label for="TinhTrangMonAn" class="col-sm-4 col-form-label text-right font-weight-bold">Tình Trạng</label>
+                        <div class="col-sm-6">
+                            <select name="TinhTrangMonAn" id="TinhTrangMonAn" class="form-control">
+                                <option value="1" <?php if ($loaiMonAn['TinhTrangMonAn'] == 1) echo 'selected'; ?>>Có</option>
+                                <option value="0" <?php if ($loaiMonAn['TinhTrangMonAn'] == 0) echo 'selected'; ?>>Chưa sẵn sàng</option>
+                            </select>
                         </div>
                     </div>
-                                
-                    <div class="form-actions py-3">
-                        <label for="" class="col-sm-2 col-form-label"></label>
-                       <a href="qllma.html">
-                           <button class="btn btn-secondary"><i class="fas fa-times"></i> Hủy</button>
-        
-                       </a>
-                       <!-- <a href="qllma.html"> -->
-                           <button class="btn btn-success" onclick="showConfirm()"><i class="far fa-save"></i> Lưu</button>
-                       <!-- </a> -->
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success px-4 me-2">
+                            <i class="far fa-save"></i> Lưu
+                        </button>
+                        <a href="index.php?page=quanly/quanlymonan/quanlyloaimonan" class="btn btn-secondary px-4">
+                            <i class="fas fa-times"></i> Hủy
+                        </a>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
-    </body>
-
-<script>
-    function showConfirm() {
-        // Hiển thị hộp thoại xác nhận
-        var result = confirm("Bạn có chắc chắn muốn sửa không?");
-        if (result) {
-            alert("Sửa thành công");
-
-            window.location.href = 'qllma.html';
-        } else {
-            alert("Sửa thất bại");
-            window.location.href = 'sualma.html';
-
+    <style>
+        body {
+            background-color: #f8f9fa;
         }
-    }
-</script>
+        .container {
+            max-width: 600px;
+        }
+        .card {
+            border-radius: 8px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .form-control {
+            border-radius: 5px;
+        }
+        label {
+            color: #333;
+        }
+    </style>
+</body>
+

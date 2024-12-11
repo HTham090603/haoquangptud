@@ -11,9 +11,9 @@ class cnlul{
             return false;
         }
     }
-    public function themdnh($gianhap,$MaNguyenLieu,$KhoiLuong){
+    public function themdnh($gianhap,$MaNguyenLieu,$KhoiLuong,$ch,$nv){
         $p = new mnlul();
-        $result=$p->insertdnh($gianhap);
+        $result=$p->insertdnh($gianhap,$ch,$nv);
         if ($result!=-1) {
             if($p->insertnlul($MaNguyenLieu,$result,$KhoiLuong)){
                 return true;
@@ -26,7 +26,7 @@ class cnlul{
     public function themnlul($MaNguyenLieu,$MaDonNhapHang,$KhoiLuong,$gianhap)
     {
         $MaDonNhapHang = $this->insertdnh($gianhap);
-            if ($dishId != -1) {
+            if ( $MaDonNhapHang != -1) {
                 if($this->insertnlul($MaNguyenLieu,$MaDonNhapHang,$KhoiLuong)){
                     echo "<script>alert('Tạo đơn nhập hàng thành công')</script>";
                 }else {
@@ -38,11 +38,22 @@ class cnlul{
             
     }
 
-    public function updateslt($MaNguyenLieu,$KhoiLuong){
+    public function updateslnl($MaNguyenLieu,$KhoiLuong,$cuahang){
         $p = new mnlul();
-        $result=$p->updatesoluongton($MaNguyenLieu,$KhoiLuong);
+        $result=$p->updatesoluongnguyenlieu($MaNguyenLieu,$KhoiLuong,$cuahang);
         if ($result) {
                 return true;
+        } else {
+            return false;
+        }
+    }
+    public function updatesoluongnl($MaNguyenLieu,$KhoiLuong,$cuahang,$madon,$gianhap){
+        $p = new mnlul();
+        $result=$p->updatetinhtrangdon($madon,$gianhap);
+        if ($result!=-1) {
+            if($p->updatesoluongnguyenlieu($MaNguyenLieu,$KhoiLuong,$cuahang)){
+                return true;
+            }
         } else {
             return false;
         }

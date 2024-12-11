@@ -1,353 +1,146 @@
-<body>
-        <div class="container kqulnl ">
-            <h1 class="d-flex justify-content-center py-3 font-weight-bold">CHI TIẾT ĐƠN NHẬP HÀNG</h1>
+<?php
+        $nguoiDung = $_SESSION["dangnhap"];  // Lấy thông tin người dùng từ session
+        $maCuaHang = $nguoiDung['MaCuaHang']; // Lấy mã cửa hàng của nhân viên
+       $maCV = $nguoiDung["MaChucVu"];
+       $manv = $nguoiDung["MaNV"];
+        $hoten=$nguoiDung["HoTen"];
+        include_once("controller/cNguyenLieu.php");
+        $p= new cnguyenlieu();
+        include_once("controller/cNLUL.php");
+        $p1=new cnlul();
+        $kl=0;
+        if(isset($_POST["btnluu"])){
             
+            if (isset($_SESSION["soluong"]) && count($_SESSION["soluong"]) > 0) {
+                $table1 = $p->ulnl($_SESSION["soluong"]);
+                while ($r1 = $table1->fetch_assoc()) {
+                // $p1->themnlul($r1["MaNguyenLieu"],$r1["MaDonNhapHang"],$r1["TongKhoiLuong"],5);
+                $kl=$kl+($r1["TongKhoiLuong"]*$r1["GiaMua"]);
+                // *
+            }
 
+            if($p1->themdnh($kl,$_POST["manlieu"],$_POST["khoiluongnl"])){
+                echo "<script>alert('Tạo đơn nhập hàng thành công')</script>";
+
+            }
+
+            }
+        }
+
+        
+
+    ?>
+
+<?php
+    include_once("controller/cNLUL.php");
+    $p4=new cnlul();
+    include_once("controller/cNguyenLieu.php");
+    
+    $p5= new cnguyenlieu();
+    $table5 = $p5->getallnguyenlieujoinloainguyenlieu();
+        $kl1=0;
+        if(isset($_POST["btntao"])){
+        $khoi[] = 0;
+        $demm=0;
+            while ($r5 = $table5->fetch_assoc()) {
+                
+                if($_POST["khoiluongnl"] != 0) {
+                    $khoi["id"] = $r5["MaNguyenLieu"];
+                    $khoi["soluong"] = $_POST["khoiluongnl"];
+                }
+                $kl1=$kl1+($_POST["khoiluongnl"][$demm]*$r5["GiaMua"]);
+$demm++;
+            } 
+            foreach($khoi["id"] as $khoiluong){
+                echo "<script>alert('". $khoiluong ."')</script>";
+            }   
+
+            if($p1->themdnh($kl1,$_POST["manlieu"],$_POST["khoiluongnl"])){
+                echo "<script>alert('Tạo đơn nhập hàng thành công')</script>";
+
+            }else{
+                echo "<script>alert('Tạo đơn nhập hàng thất bại')</script>";
+            }
+
+            }
+        
+    
+
+?>
+
+<body>
+        <div class="container qldnh">
+            <h1 class="d-flex justify-content-center py-3 font-weight-bold">NHẬP HÀNG</h1>
+            <!-- <a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang" class="d-flex justify-content-center">Nhập hàng </a>
+            <a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang" class="d-flex justify-content-center">Tạo đơn nhập hàng thủ công</a> -->
+
+            <div class="date-picker d-flex justify-content-end">
+                <!-- <input type="date" name="" id="" class="date-input"> -->
+                <!-- <input type="text" value="12 / 10 / 2024" readonly> -->
+                <!-- <i class="fas fa-calendar-alt"></i> -->
+            </div>
+            <form action="" method="post">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Mã Nhập Hàng:</th>
-                        <td colspan="5">1</td>
-                    </tr>
-                    <tr>
-                        <th>Ngày ước lượng:</th>
-                        <td colspan="5">12/10/2024</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>Tên Người Nhập: </th>
-                        <td colspan="5">Lư Thị Hồng Thắm</td>
-                    </tr>
-                    <tr>
-                        <th>Cửa Hàng: </th>
-                        <td colspan="5">Cửa Hàng 1</td>
-                    </tr>
-                 
-
-                    <tr>
-                        <th colspan="6">DANH SÁCH NHẬP HÀNG</th>
-                    </tr>
-                    <tr>
-                        <th>
-                            Mã Nguyên Liệu
-                        </th>
-                        <th>
-                            Tên Nguyên Liệu
-                        </th>
-                        <th>
-                            Loại Nguyên Liệu
-                        </th>
-                        <th>
-                            Đơn Vị Tính
-                        </th>
-                        <th>
-                            Số Lượng
-                        </th>
-                        <th>
-                            Hình Ảnh
-                        </th>
-                       
+                        <th>Mã Nhập Hàng</th>
+                        <th>Ngày Nhập Hàng</th>
+                        <th>Giá Nhập</th>
+                        <th>Tên Người Nhập</th>
+                        <th>Cửa Hàng</th>
+                        <th>Tình Trạng</th>
+                        <th>Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            Đùi Gà
-                        </td>
-                        <td>
-                            Thịt Gà
-                        </td>
-                        <td>
-                            Cái
-                        </td>
-                        <td>
-                            102
-                        </td>
-                        <td>
-                            <img alt="" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/1sESHp19V0KtDF3CTQZ6ppMooueSpYnxY07DLID4W8f6fXVnA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            Bột Chiên Xù
-                        </td>
-                        <td>
-                            Bột
-                        </td>
-                        <td>
-                            Kg
-                        </td>
-                        <td>
-                            20
-                        </td>
-                        <td>
-                            <img alt="" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/OCMC8ycr9eR0Qi3pffyj7f6M4ivheBBm4XGpvgAB7fLv8fV1JA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            3
-                        </td>
-                        <td>
-                            Đường
-                        </td>
-                        <td>
-                            Gia Vị
-                        </td>
-                        <td>
-                            Kg
-                        </td>
-                        <td>
-                            15
-                        </td>
-                        <td>
-                            <img alt="Sugar" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/vpXeqEZjkhQiOKe06rGUyqQE7UfcUNqMLa2ay0QGBggyfvqOB.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            4
-                        </td>
-                        <td>
-                            Muối
-                        </td>
-                        <td>
-                            Gia Vị
-                        </td>
-                        <td>
-                            Kg
-                        </td>
-                        <td>
-                            15
-                        </td>
-                        <td>
-                            <img alt="Salt" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/nSQQey77hg2IAiirmYff5vBsfg29S0g5Bp8Oxs0cLOeaefV1JA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            5
-                        </td>
-                        <td>
-                            Mì Ý
-                        </td>
-                        <td>
-                            Mì
-                        </td>
-                        <td>
-                            Bịch
-                        </td>
-                        <td>
-                            40
-                        </td>
-                        <td>
-                            <img alt="Spaghetti" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/CIpx7C5GOtYXAZ1Bm44guc0De9uHVFkJO1LPvnzU8El7frqTA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            6
-                        </td>
-                        <td>
-                            Tiêu
-                        </td>
-                        <td>
-                            Gia Vị
-                        </td>
-                        <td>
-                            Kg
-                        </td>
-                        <td>
-                            5
-                        </td>
-                        <td>
-                            <img alt="Pepper" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/xlr7UNxymXb5OZ9yE5SHDYFOV8wonFRCkWVCMtZJQ4S9fV1JA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            7
-                        </td>
-                        <td>
-                            Bánh Mì
-                        </td>
-                        <td>
-                            Bánh Mì
-                        </td>
-                        <td>
-                            Ổ
-                        </td>
-                        <td>
-                            60
-                        </td>
-                        <td>
-                            <img alt="Bread" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/Leyvo9fgLXvY1UxBJzuseFFBfWP6Y60w9foDgEMJL26kffV1JA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            8
-                        </td>
-                        <td>
-                            Cà Chua
-                        </td>
-                        <td>
-                            Rau Củ
-                        </td>
-                        <td>
-                            Trái
-                        </td>
-                        <td>
-                            30
-                        </td>
-                        <td>
-                            <img alt="Tomato" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/VYeWWIejminXnk41abvsfnfldK2jiQrFPW8gAatWv7A3efq6E.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            9
-                        </td>
-                        <td>
-                            Thịt Băm
-                        </td>
-                        <td>
-                            Thịt Heo
-                        </td>
-                        <td>
-                            Kg
-                        </td>
-                        <td>
-                            10
-                        </td>
-                        <td>
-                            <img alt="Minced meat" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/E0qlSzNXJqZmG1tGzhMRke3neBVSU0e6P31q9fUng8iaffq6E.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            10
-                        </td>
-                        <td>
-                            Khoai Tây
-                        </td>
-                        <td>
-                            Rau Củ
-                        </td>
-                        <td>
-                            Củ
-                        </td>
-                        <td>
-                            60
-                        </td>
-                        <td>
-                            <img alt="Potato" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/DU7jSOdIzkb2GlfFAzzQxN7kydACjX40xEPqiqjiUbx1frqTA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>
-                            11
-                        </td>
-                        <td>
-                            Tương Ớt
-                        </td>
-                        <td>
-                            Gia Vị
-                        </td>
-                        <td>
-                            Chai
-                        </td>
-                        <td>
-                            5
-                        </td>
-                        <td>
-                            <img alt="Chili sauce" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/l8qwottuOeQMb6qF50dxmRALM5Y5G7rWihNUEiUf5uUufXVnA.jpg"
-                                width="50" />
-                        </td>
-                      
-                    </tr>
-                    <tr>
-                        <td>
-                            12
-                        </td>
-                        <td>
-                            Tương Cà
-                        </td>
-                        <td>
-                            Gia Vị
-                        </td>
-                        <td>
-                            Chai
-                        </td>
-                        <td>
-                            45
-                        </td>
-                        <td>
-                            <img alt="Tomato sauce" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/JbIwiTIFJIpAGRB4dmhDWAHB99fH0i6z5qFwohDmeALxfXVnA.jpg"
-                                width="50" />
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <th colspan="3" >Tổng tiền</th>
-                        <td colspan="2" >2.000.000d</td>
-                    </tr>
+                    <?php
+                    include_once("controller/cDonNhapHang.php");
+                   $p= new cdonnhaphang();
+                //    $table=$p->getalldonnhaphang2();
+                   if ($maCV == "1") {  // Nếu là quản lý, lấy tất cả các bàn từ tất cả cửa hàng
+                    $table=$p->getalldonnhaphang2();
+                    
+                } else {  // Nếu là nhân viên, chỉ lấy bàn của cửa hàng mà nhân viên đó quản lý
+                    $table=$p->getalldonnhaphang2theoch($maCuaHang);
+                    
+                }
+                   if(!$table){
+                    echo "Không tìm thấy dữ liệu";
+
+                   } else{
+                    while($row=$table->fetch_assoc()){
+                        echo '<tr>';
+                        echo '<td>'.$row['MaDonNhapHang'].'</td>';
+                        $formatted_date = date("d-m-Y", strtotime($row['NgayNhapHang']));
+                        echo '<td>' .$formatted_date.'</td>';
+                        echo '<td>';
+                        $gia = number_format($row['GiaNhap'], 0, ',', '.'); // Không có số thập phân
+                            echo $gia . " VND";
+                        echo '</td>';
+                        echo '<td>'.$row['MaNhanVien'].'</td>';
+                        echo '<td>'.$row['MaCuaHang'].'</td>';
+                        echo '<td>';
+                        if($row['TinhTrang']==1){
+                            echo 'Chưa nhập';
+                        }elseif($row['TinhTrang']==2){
+                            echo 'Đã nhập';
+                        }
+                        echo '</td>';
+                        echo '<td><a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang/taodonnhaphang2/xemchitietdonnhaphang2&madonnhaphang='.$row['MaDonNhapHang'].'">Xem Chi Tiết</a> <i class="fas fa-eye action-icon"></i></td>';
+                        echo '</tr>';
+                    }
+ 
+                   }
+
+
+?>
+                   
+                    
                 </tbody>
             </table>
-
-
-            <div class="d-flex justify-content-center py-4">
-                <a href="taodnh1.html">
-                    <button class="btn btn-secondary mx-2 p-2">Quay lại</button>
-                </a>
-
-                <a href="index.php?page=quanly/quanlydonnhaphang">
-
-                    <button class="btn btn-success p-2" onclick="showConfirm()">Xác nhận </button>
-                </a>
-
-            </div>
-
-
-
+            </form>
+                <div class="d-flex justify-content-center py-5">
+                    
+                </div>
         </div>
-
     </body>

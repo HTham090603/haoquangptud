@@ -2,7 +2,9 @@
 include_once("controller/cNguyenLieu.php");
 $p = new cnguyenlieu();
 $manl= $_REQUEST["idnl"];
-$kq=$p->get1nguyenlieu($manl);
+$mach=$_REQUEST["idch"];
+
+$kq=$p->get1nguyenlieu($manl,$mach);
 if($kq){
     while($r=$kq->fetch_assoc()){
         $tennl=$r["TenNguyenLieu"];
@@ -107,60 +109,28 @@ if($kq){
                         </div>
                     </div>
 
-                    <div class="form-group row py-2">
-                        <label for="" class="col-sm-2 col-form-label">Số Lượng</label>
-                        <div class="col-sm-5">
-                        <input type="number" class="form-control" value="<?php if(isset($soluong)) echo $soluong ?>" name="soluong" id="">
-
-                        </div>
-                    </div>
+                    
         
-                    <div class="form-group row py-2">
-                        <label for="" class="col-sm-2 col-form-label">Chọn Cửa Hàng</label>
-                        <div class="col-sm-5">
-                        <select name="cuahang" class="form-control" required>
-                        <option value="" >Chọn Cửa Hàng</option>
-                        <?php
-                        include_once("controller/cCuaHang.php");
-                        $c=new ccuahang();
-                        $macuahang = $c->getallcuahang();
-                        if(!$macuahang){
-                            echo "khong co data";
-                        }else{
-
-                            while($r2= $macuahang->fetch_assoc()) {
-                                if($r2["MaCuaHang"]==$cuahang){
-                                    echo '<option name="cuahang"  value = "' .$r2["MaCuaHang"].'" selected >'.$r2["TenCuaHang"].'</option>';
-                                }else{
-                                    echo '<option name="cuahang"  value = "'.$r2["MaCuaHang"].'"> '.$r2["TenCuaHang"].'</option>';
-                                }
-                            }
-                        }
-    
-                        ?>
-                    </select>   
-                            
-                        </div>
-                    </div>
-                    <div class="form-group row py-2">
+                   
+                    <!-- <div class="form-group row py-2">
                         <label for="" class="col-sm-2 col-form-label">Tình Trạng</label>
                         <div class="col-sm-5">
                             <select name="tinhtrang" id="" class="form-control">
 
                             
                             <?php
-                            if($tinhtrang==1){
-                                echo '<option name="tinhtrang"  value = "' .$r["TinhTrang"].'" selected >Đang sử dụng</option>';
+                            // if($tinhtrang==1){
+                            //     echo '<option name="tinhtrang"  value = "' .$r["TinhTrang"].'" selected >Đang sử dụng</option>';
                                 
-                            }else{
-                                echo '<option name="tinhtrang"  value = "' .$r["TinhTrang"].'" selected >Không còn sử dụng</option>';
+                            // }else{
+                            //     echo '<option name="tinhtrang"  value = "' .$r["TinhTrang"].'" selected >Không còn sử dụng</option>';
 
-                            }
+                            // }
 
                             ?>
                         </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row py-2">
                         <label for="" class="col-sm-2 col-form-label">Hình ảnh</label>
                         <div class="col-sm-5">
@@ -168,7 +138,13 @@ if($kq){
                         </div>
                     </div>
                     
-                   
+                    <!-- <div class="form-group row py-2 hidden"> -->
+                        <!-- <label for="" class="col-sm-2 col-form-label">Số Lượng</label> -->
+                        <!-- <div class="col-sm-5">
+                        <input type="hidden" class="form-control" readonly value="<?php if(isset($soluong)) echo $soluong ?>" name="soluong" id="">
+
+                        </div>
+                    </div> -->
                     
                     <div class="form-actions py-3">
                         <label for="" class="col-sm-2 col-form-label"></label>
@@ -178,7 +154,7 @@ if($kq){
                        <!-- </a> -->
                        <!-- <a href="qlnl.html"> -->
         
-                           <button name = "submit"class="btn btn-success" onclick="showConfirm()"><i class="far fa-save"></i> Lưu</button>
+                           <button name = "submit"class="btn btn-success" onclick="showConfirm('Bạn có chắc chắn muốn sửa không?')"><i class="far fa-save"></i> Lưu</button>
                        <!-- </a> -->
                     </div>
                 </div>
@@ -198,7 +174,7 @@ if(isset($_REQUEST["submit"])){
     if($_FILES["hinhanh"]["type"]=="image/png"||$_FILES["hinhanh"]["type"]=="image/jpeg"||$_FILES["hinhanh"]["type"]=="image/jpg"||strlen($filename_new) === 0){
         if(strlen($filename_new) != 0) {
             if (move_uploaded_file($_FILES["hinhanh"]["tmp_name"], "img/" . $filename_new)) {
-                if ($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],  $filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"], $_REQUEST["cuahang"], $_REQUEST["soluong"],$_REQUEST["tinhtrang"])){
+                if ($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],  $filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"])){
     
                     echo "<script>alert('bạn đã sửa thông tin thành công')</script>";
                 }
@@ -209,7 +185,7 @@ if(isset($_REQUEST["submit"])){
             }else
             echo "<script>alert('Upload ảnh thất bại')</script>";
         }else {
-            if($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],  $filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"], $_REQUEST["cuahang"], $_REQUEST["soluong"],$_REQUEST["tinhtrang"])){
+            if($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],  $filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"])){
                 echo "<script>alert('bạn đã sửa thông tin thành công')</script>";
 
             }else{
@@ -227,3 +203,10 @@ if(isset($_REQUEST["submit"])){
 
 
 ?>
+
+
+<script>
+    function showConfirm(message) {
+    return confirm(message);
+}
+</script>

@@ -1,4 +1,9 @@
 <?php
+        $nguoiDung = $_SESSION["dangnhap"];  // Lấy thông tin người dùng từ session
+        $maCuaHang = $nguoiDung['MaCuaHang']; // Lấy mã cửa hàng của nhân viên
+       $maCV = $nguoiDung["MaChucVu"];
+       $manv = $nguoiDung["MaNV"];
+        $hoten=$nguoiDung["HoTen"];
         include_once("controller/cNguyenLieu.php");
         $p= new cnguyenlieu();
         include_once("controller/cNLUL.php");
@@ -14,11 +19,22 @@
                 // *
             }
 
-            if($p1->themdnh($kl,$_POST["manlieu"],$_POST["khoiluongnl"])){
+            if($p1->themdnh($kl,$_POST["manlieu"],$_POST["khoiluongnl"],$maCuaHang,$manv)){
                 echo "<script>alert('Tạo đơn nhập hàng thành công')</script>";
 
             }
 
+            }
+        }
+
+
+
+        if(isset($_POST["updatednh"])){
+            if($p1->updatesoluongnl($_POST["manguyenlieu"],$_POST["khoiluongnhap"],$maCuaHang,$_POST["madonnhaphang"],$_POST["tongtiennhap"]*1000)){
+                echo "<script>alert('Đã nhập hàng')</script>";
+
+            }else{
+                echo "<script>alert('Nhập hàng thất bại')</script>";
             }
         }
 
@@ -32,7 +48,7 @@
     include_once("controller/cNguyenLieu.php");
     
     $p5= new cnguyenlieu();
-    $table5 = $p5->getallnguyenlieujoinloainguyenlieu();
+    $table5 = $p5->getallnguyenlieujoinloainguyenlieutheoch($maCuaHang);
         $kl1=0;
         if(isset($_POST["btntao"])){
         $khoi[] = 0;
@@ -50,7 +66,7 @@ $demm++;
                 echo "<script>alert('". $khoiluong ."')</script>";
             }   
 
-            if($p1->themdnh($kl1,$_POST["manlieu"],$_POST["khoiluongnl"])){
+            if($p1->themdnh($kl1,$_POST["manlieu"],$_POST["khoiluongnl"],$maCuaHang,$manv)){
                 echo "<script>alert('Tạo đơn nhập hàng thành công')</script>";
 
             }else{
@@ -66,7 +82,16 @@ $demm++;
 <body>
         <div class="container qldnh">
             <h1 class="d-flex justify-content-center py-3 font-weight-bold">QUẢN LÝ ĐƠN NHẬP HÀNG</h1>
-            <a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang" class="d-flex justify-content-center">Tạo đơn nhập hàng</a>
+            <?php
+            if($maCV==2){
+                echo '<a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang/taodonnhaphang2" class="d-flex justify-content-center">Nhập hàng </a>
+            <a href="index.php?page=quanly/quanlydonnhaphang/taodonnhaphang" class="d-flex justify-content-center">Tạo đơn nhập hàng thủ công</a>';
+            }else{
+                echo "";
+            }
+
+            ?>
+            
 
             <div class="date-picker d-flex justify-content-end">
                 <!-- <input type="date" name="" id="" class="date-input"> -->
@@ -90,7 +115,13 @@ $demm++;
                     <?php
                     include_once("controller/cDonNhapHang.php");
                    $p= new cdonnhaphang();
-                   $table=$p->getalldonnhaphang();
+                   if ($maCV == "1") {  // Nếu là quản lý, lấy tất cả các bàn từ tất cả cửa hàng
+                    $table=$p->getalldonnhaphang();
+                    
+                } else {  // Nếu là nhân viên, chỉ lấy bàn của cửa hàng mà nhân viên đó quản lý
+                    $table=$p->getalldonnhaphangtheoch($maCuaHang);
+                    
+                }
                    if(!$table){
                     echo "Không tìm thấy dữ liệu";
 
@@ -104,14 +135,15 @@ $demm++;
                         $gia = number_format($row['GiaNhap'], 0, ',', '.'); // Không có số thập phân
                             echo $gia . " VND";
                         echo '</td>';
-                        echo '<td>'.$row['MaNhanVien'].'</td>';
+                        echo '<td>'.$hoten.'</td>';
                         echo '<td>'.$row['MaCuaHang'].'</td>';
                         echo '<td>';
                         if($row['TinhTrang']==1){
+                            echo 'Chưa nhập ';
+                        }elseif($row['TinhTrang']==2){
                             echo 'Đã nhập';
-                        }else{
-                            echo 'Chưa nhập';
                         }
+                        // echo $row['TinhTrang'];
                         echo '</td>';
                         echo '<td><a href="index.php?page=quanly/quanlydonnhaphang/xemchitietdonnhaphang&madonnhaphang='.$row['MaDonNhapHang'].'">Xem Chi Tiết</a> <i class="fas fa-eye action-icon"></i></td>';
                         echo '</tr>';

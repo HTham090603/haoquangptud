@@ -1,10 +1,15 @@
 <?php
 if (isset($_REQUEST["tinhtoan"])){
     $_SESSION["soluong"]=$_POST["soluong"];
-    // foreach($_SESSION["soluong"] as $sl) {
-    //     echo $sl;
-    // }
+    foreach($_SESSION["soluong"] as $sl) {
+        // echo $sl;
+    }
 }
+$nguoiDung = $_SESSION["dangnhap"];  // Lấy thông tin người dùng từ session
+        $maCuaHang = $nguoiDung['MaCuaHang']; // Lấy mã cửa hàng của nhân viên
+       $maCV = $nguoiDung["MaChucVu"];
+       $manv = $nguoiDung["MaNV"];
+        $hoten=$nguoiDung["HoTen"];
 ?>
     <body>
             <div class="container kqulnl ">
@@ -58,7 +63,13 @@ if (isset($_REQUEST["tinhtoan"])){
                                     echo '<td>' . $r["TenNguyenLieu"] . '</td>';
                                     echo '<td>' . $r["TenLoaiNguyenLieu"] . '</td>';
                                     echo '<td><img style="width: 50px;height=50" src="img/nguyenlieu/' . $r["HinhAnh"] . '" alt=""></td>';
-                                    echo '<td><input type="text" readonly class="form-control-plaintext text-center" value="' . $r["TongKhoiLuong"] . '" name="khoiluongnl[]"></td>';
+                                    // if($r["TongKhoiLuong"]-$r["SoLuong"]>0){
+                                    //     echo '<td><input type="text" readonly class="form-control-plaintext text-center" value="' . $r["TongKhoiLuong"]-$r["SoLuong"] . '" name="khoiluongnl[]"></td>';
+                                    // }else {
+                                    //     echo "<td class='py-2 border-2'>Đã đủ</td>";
+                                    // }
+                                        echo '<td><input type="text" readonly class="form-control-plaintext text-center" value="' . $r["TongKhoiLuong"] . '" name="khoiluongnl[]"></td>';
+
                                     echo '<td>' . $r["TenDonViTinh"] . '</td></tr>';
                                 }
                         } else {

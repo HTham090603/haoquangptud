@@ -8,7 +8,7 @@ if($kq){
         $madnh=$r["MaDonNhapHang"];
         $ngaynhap=$r["NgayNhapHang"];
         $gia=$r["GiaNhap"];
-        $hoten=$r["MaNhanVien"];
+        $hoten=$r["HoTen"];
         $tench=$r["MaCuaHang"];
         $trangthai=$r["TinhTrang"];
 
@@ -76,13 +76,14 @@ if($kq){
                             Loại Nguyên Liệu
                         </th>
                         <th>
-                            Đơn Vị Tính
+                            Hình Ảnh
                         </th>
+                        
                         <th>
                             Số Lượng
                         </th>
                         <th>
-                            Hình Ảnh
+                            Đơn Vị Tính
                         </th>
                        
                     </tr>
@@ -150,16 +151,16 @@ if($kq){
 
 
             <div class="d-flex justify-content-center py-4">
-                <a href="index.php?page=quanly/quanlydonnhaphang">
+                <a href="index.php?page=quanlydonnhaphang">
 
-                    <button class="btn btn-success p-2">Xác nhận </button>
+                    <button class="btn btn-success p-2"><a href="index.php?page=quanly/quanlydonnhaphang">Xác nhận</a> </button>
                 </a>
                 <a href="index.php?page=quanly/quanlydonnhaphang">
                 <?php
     if($trangthai==2){
         echo '<button class="btn btn-outline-danger mx-3 p-2" name="update">Đã cập nhật số lượng</button>';
     }else{
-        echo '<button class="btn btn-outline-success mx-3 p-2" name="update">Cập nhật số lượng</button>';
+        echo '<button class="btn btn-outline-success mx-3 p-2" name="updatednh">Cập nhật số lượng</button>';
 
     }
 

@@ -1,6 +1,6 @@
 *{
-    font-family: "Brush Script MT", cursive;
-    /* font-family: "block-pro", "Helvetica Neue", Verdana, Arial, sans-serif;  */
+    /* font-family: "Brush Script MT", cursive; */
+    font-family: "block-pro", "Helvetica Neue", Verdana, Arial, sans-serif; 
          margin: 0;
          padding: 0;
          /* background-color: #f5f5f5; */
@@ -8,6 +8,7 @@
     
    /* trang chủ   */
      .head{
+        /* position: fixed; */
         position: sticky;
         top: 0;
         z-index: 1;
@@ -77,7 +78,7 @@
 
 /* slide */
 .slider-container {
-    padding-top: 50px;
+    /* padding-top: 10px; */
     position: relative;
     max-width: 84%;
     margin: auto;
@@ -311,7 +312,7 @@ button {
     justify-content: space-between;
 }
 .ql-card {
-    width: 150px;
+    /* width: 150px; */
     height: 250px;
     background-color: white;
     border: 2px solid #ffa500;

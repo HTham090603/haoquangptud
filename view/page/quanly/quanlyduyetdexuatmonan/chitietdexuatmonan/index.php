@@ -1,58 +1,127 @@
 <style>
-      h2 {
-        margin: 0;
-        padding-top: 20px;
-        padding-bottom: 20px;
-      }
-    </style>
+  .status-text {
+    color: blue;
+  }
 
-  <body>
-  
+  .status-update {
+    color: green;
+  }
 
-    <!-- content -->
-    <div class="container">
-      <h2 style="text-align: center">CHI TIẾT ĐỀ XUẤT MÓN ĂN</h2>
-      <div class="content">
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Tên món ăn</label>
-          <div class="col-sm-5">Hamburger</div>
-        </div>
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Mô tả</label>
-          <div class="col-sm-5">
-            Hamburger là một món ăn nhanh phổ biến trên toàn thế giới, thường
-            gồm một miếng thịt (thường là thịt bò) được kẹp giữa hai miếng bánh
-            mì tròn. Bánh mì có thể được nướng nhẹ để tạo độ giòn và thơm.
-          </div>
-        </div>
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Nguyên liệu</label>
-          <div class="col-sm-5">
-            Bánh mì tròn, 300g thịt bò xay nhuyễn, hành tây, cà chua, tương cà,
-            tương ớt, rau.
-          </div>
-        </div>
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Giá đề xuất</label>
-          <div class="col-sm-5">55.000 VND</div>
-        </div>
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Người đề xuất</label>
-          <div class="col-sm-5">Nguyễn Văn A</div>
-        </div>
-        <div class="form-group row py-2">
-          <label for="" class="col-sm-2 col-form-label">Trạng thái</label>
-          <div class="col-sm-5">Chờ duyệt</div>
-        </div>
-        <div class="form-actions py-3">
-          <label for="" class="col-sm-2 col-form-label"></label>
+  .status {
+    color: red;
+  }
+</style>
 
-          <button class="btn btn-secondary">Từ chối</button>
+<?php
+include_once("controller/cDeXuat.php");
 
-          <button class="btn btn-success" onclick="showConfirm()">
-            Duyệt đề xuất
-          </button>
-        </div>
-      </div>
-    </div>
-  </body>
+// Lấy mã đề xuất từ request
+$chitiet = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+
+// Gọi controller để lấy dữ liệu chi tiết
+$p = new CDeXuat();
+$tblDX = $p->getChiTietDX($chitiet);
+include_once("view/page/quanly/quanlyduyetdexuatmonan/chitietdexuatmonan/xuly.php");
+
+// Hiển thị dữ liệu
+if ($tblDX && $tblDX->num_rows > 0) {
+    echo '<h2 style="text-align: center; padding-top: 15px; padding-bottom: 20px;">Chi tiết đề xuất món ăn</h2>';
+    echo '<div style="display: flex; justify-content: center; align-items: center;">';
+    echo "<table style='width: 60%;'>";
+    echo "<thead>";
+    echo "<tr>";
+    echo "<th style='padding: 10px; border: 1px solid #ddd;'>Thông tin</th>";
+    echo "<th style='padding: 10px; border: 1px solid #ddd;'>Chi tiết</th>";
+    echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
+    $trangThai = null; // Biến để lưu trạng thái
+    while ($r = $tblDX->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd; width: 25%'>Mã đề xuất</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["MaDeXuat"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Tên món ăn</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["TenMonAn"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Loại món ăn</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["TenLoaiMonAn"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Mô tả</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["MoTa"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Nguyên liệu</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["NguyenLieu"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Giá đề xuất</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . number_format($r["GiaDeXuat"], 0, '.', ',') . " VND</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Người đề xuất</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($r["NguoiDeXuat"]) . "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>Trạng thái</td>";
+        echo "<td>" . 
+                (($r['TrangThai'] == 1) ? '<span class="status-text">Đang chờ duyệt</span>' : 
+                (($r['TrangThai'] == 2) ? '<span class="status-update">Đã duyệt</span>' : '<span class="status">Đã từ chối</span>')) . 
+            "</td>";
+        echo "</tr>";
+
+        // Ghi lại trạng thái để kiểm tra bên ngoài vòng lặp
+        $trangThai = $r['TrangThai'];
+    }
+    echo "</tbody>";
+    echo "</table>";
+    echo "</div>";
+
+    // Hiển thị nút Quay lại
+    echo '<div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 10px;">';
+    echo '<button class="btn btn-primary" style="color: white; border: none; border-radius: 5px; cursor: pointer;"><a href="index.php?page=quanly/quanlyduyetdexuatmonan" style="color: inherit; text-decoration: none;">Quay lại</a></button>';
+
+    // Hiển thị nút Duyệt và Từ chối nếu trạng thái là 1
+    if ($trangThai == 1) {
+        // Form Duyệt
+        echo '<form method="POST" action="" style="display: inline-block; onsubmit="return confirmDuyet(this);">';
+        echo '<input type="hidden" name="action" value="duyet">';
+        echo '<input type="hidden" name="id" value="' . htmlspecialchars($chitiet) . '">';
+        echo '<button type="submit" style="background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Duyệt</button>';
+        echo '</form>';
+
+        // Form Từ chối
+        echo '<form method="POST" action="" style="display: inline-block; onsubmit="return confirmTuChoi(this);">';
+        echo '<input type="hidden" name="action" value="tuchoi">';
+        echo '<input type="hidden" name="id" value="' . htmlspecialchars($chitiet) . '">';
+        echo '<button type="submit" style="background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Từ chối</button>';
+        echo '</form>';
+    }
+    echo '</div>';
+} else {
+    echo "<h2>Không tìm thấy chi tiết đề xuất!</h2>";
+}
+?>
+
+<script>
+    function confirmDuyet(form) {
+        const isConfirmed = confirm("Bạn có chắc chắn muốn duyệt đề xuất này không?");
+        if (isConfirmed) {
+            form.submit();
+        } else {
+            return false; // Hủy việc gửi form
+        }
+    }
+
+    function confirmTuChoi(form) {
+        const isConfirmed = confirm("Bạn có chắc chắn muốn từ chối đề xuất này không?");
+        if (isConfirmed) {
+            form.submit();
+        } else {
+            return false; // Hủy việc gửi form
+        }
+    }
+</script>

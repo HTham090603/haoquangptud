@@ -79,7 +79,7 @@
       border: none;
       cursor: pointer;
       font-size: 1rem;
-      margin-top: 30%;
+      margin-top: 1 0%;
     }
     .button i {
       margin-right: 8px;
@@ -95,27 +95,43 @@
 <body>
   <div class="container">
     <div class="logo-container">
-      <img src="https://storage.googleapis.com/a1aa/image/n4OP2kn6yT7yBZshdqmk2rioMhzyUCoQhZenloL0YcFGxV1JA.jpg" alt="Hamburger Fun logo" class="logo"/>
+      <!-- <img src="https://storage.googleapis.com/a1aa/image/n4OP2kn6yT7yBZshdqmk2rioMhzyUCoQhZenloL0YcFGxV1JA.jpg" alt="Hamburger Fun logo" class="logo"/> -->
+      <img src="img/logo.png" alt="Hamburger Fun logo" class="logo"/>
+    
     </div>
     <h1>Hamburger Fun</h1>
     <?php
-            if (isset($_POST["btDangnhap"])) {
-                include("controller/cNguoiDung.php");
+if (isset($_POST["btDangnhap"])) {
+    include("controller/cNguoiDung.php");
 
-                $obj = new CNguoiDung();
-                $tenTK = $_POST["TenTK"];
-                $password = $_POST["password"];
-                
-                $_SESSION["dangnhap"] = $obj->dangnhaptaikhoan($tenTK, $password);
+    $obj = new CNguoiDung();
+    $tenTK = $_POST["TenTK"];
+    $password = $_POST["password"];
+    
+    // Gọi hàm đăng nhập để lấy thông tin tài khoản
+    $user = $obj->dangnhaptaikhoan($tenTK, $password);
 
-                if ($_SESSION["dangnhap"]) {
-                    header("Location: index.php?page=quanly");
-                    exit();
-                } else {
-                    echo "<p style='color:red;'>Đăng nhập không thành công, vui lòng kiểm tra lại thông tin</p>";
-                }
-            }
-        ?>
+    if ($user) {
+        if ($user['TrangThai'] == 0) {
+            // Kiểm tra trạng thái "Nghỉ việc"
+            echo "<p style='color:red;'>Tài khoản của bạn đã bị khóa hoặc bạn đã nghỉ việc.</p>";
+        } else {
+            // Đăng nhập thành công
+            $_SESSION["dangnhap"] = $user;
+            header("Location: index.php?page=quanly");
+            exit();
+        }
+    } else {
+        // Thông báo lỗi đăng nhập
+        echo "<script>
+        window.onload = function() {
+            alert('Đăng nhập không thành công!');
+           
+        }
+        </script>";
+    }
+}
+?>
         <form method="POST" action="">
             <div class="input-group">
                 <i class="fas fa-user"></i>
@@ -125,11 +141,100 @@
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" id="password" placeholder="Mật khẩu" required />
             </div>
-            <a href="#" class="forgot-password">Quên mật khẩu?</a>
+            <!-- <a href="#" class="forgot-password">Quên mật khẩu?</a> -->
             <div class="button-group">
                 <button type="submit" class="button button-green" name="btDangnhap">Đăng nhập</button>
             </div>
         </form>
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener for checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="nguyen_lieu[]"]');
+        
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const quantityInput = document.getElementById('so_luong_' + this.value);
+                if (this.checked) {
+                    quantityInput.disabled = false;  // Enable the quantity input when checked
+                } else {
+                    quantityInput.disabled = true;  // Disable the quantity input when unchecked
+                }
+            });
+        });
+    });
+</script>
+<!-- <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Hàm để hiển thị thông báo lỗi
+    function showError(inputElement, message) {
+        const errorElement = document.createElement('small');
+        errorElement.classList.add('text-danger');
+        errorElement.textContent = message;
+
+        // Nếu đã có thông báo lỗi, không thêm nữa
+        if (inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('text-danger')) {
+            inputElement.nextElementSibling.textContent = message;
+        } else {
+            inputElement.parentNode.appendChild(errorElement);
+        }
+
+        inputElement.classList.add('is-invalid');  // Thêm lớp lỗi cho input
+    }
+
+    // Hàm để xóa thông báo lỗi
+    function removeError(inputElement) {
+        if (inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('text-danger')) {
+            inputElement.nextElementSibling.remove();
+        }
+        inputElement.classList.remove('is-invalid');
+    }
+
+    // Kiểm tra tên 
+    const TenTK = document.querySelector('input[name="TenTK"]');
+    TenTK.addEventListener('blur', function() {
+        if (!TenTK.value.trim()) {
+            showError(TenTK, "Tên đăng nhập không được rỗng.");
+        } else {
+            removeError(TenTK);
+        }
+    });
+    const password = document.querySelector('input[name="password"]');
+    password.addEventListener('blur', function() {
+        if (!password.value.trim()) {
+            showError(password, "Mật khẩu không được rỗng.");
+        } else {
+            removeError(password);
+        }
+    });
+
+    // Kiểm tra trước khi gửi form
+    document.querySelector('form').addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Kiểm tra lại Tên 
+        if (!TenTK.value.trim()) {
+            showError(TenTK, "Tên đăng nhập không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(TenTK);
+        }
+        if (!password.value.trim()) {
+            showError(password, "Mật khẩu không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(password);
+        }
+
+        if (!isValid) {
+        
+            alert('Đăng nhập thất bại. Vui lòng nhập đầy đủ!');
+            e.preventDefault();  // Ngừng gửi form nếu có lỗi
+            
+          
+        }
+    });
+});
+</script> -->
 
