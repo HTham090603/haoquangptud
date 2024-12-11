@@ -36,6 +36,20 @@ class cMonAn{
             }
         }
     }
+    public function getAllMonANTT() {
+        $p = new mMonAn();
+        $tblSP = $p->SelectAllMonAnTT();
+        
+        if (!$tblSP) {
+            return -1; 
+        } else {
+            if ($tblSP->num_rows > 0) {
+                return $tblSP; 
+            } else { 
+                return 0; 
+            }
+        }
+    }
     //public function getMaMonAn($id){
         // $p = new MMonAn();
         // $tblSP = $p->SelectMaMonAn($id);

@@ -34,6 +34,20 @@ public function SelectAllMonAn() {
     }
 } 
 
+public function SelectAllMonAnTT() {
+    $p = new clsKetNoi();
+    $con = $p->moKetNoi();
+    
+    if ($con) {
+        $str = "SELECT * FROM monan where Tinhtrang='Có'";
+        $tblMonAN = $con->query($str);
+        $p->dongKetNoi($con);
+        return $tblMonAN;
+    } else {
+        return false;  
+    }
+} 
+
 // Lấy một món ăn theo id
 public function SelectMaMonAn($id) {
 $p = new clsKetNoi();

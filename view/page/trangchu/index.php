@@ -222,7 +222,7 @@ if (isset($_POST['btnTK']) && !empty($_POST['txtTK'])) {
 } elseif ($maLoaiMonAn != '') {
     $tblMonAn = $p->getAllMonanbyLoai($maLoaiMonAn);
 } else {
-    $tblMonAn = $p->getAllMonAn();
+    $tblMonAn = $p->getAllMonAnTT();
 }
 ?>
 
