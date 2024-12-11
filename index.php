@@ -16,4 +16,4 @@ include("view/page/404/index.php");
 include("view/layout/footer.php");
 
 ?>
-<a href=""></a>
+
