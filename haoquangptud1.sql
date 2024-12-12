@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 11, 2024 lúc 03:35 PM
+-- Thời gian đã tạo: Th12 12, 2024 lúc 04:14 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -374,12 +374,11 @@ CREATE TABLE `cuahang` (
 --
 
 INSERT INTO `cuahang` (`MaCuaHang`, `TenCuaHang`, `DiaChi`, `TinhTrang`, `HinhAnh`) VALUES
-(1, 'Cửa hàng 1', 'NVB', 'Mở', '701_shop.png'),
-(2, 'Cửa hàng 2', 'NVB', 'Mở', '709_3873446.jpg'),
-(3, 'Cửa hàng 3', 'NVB', 'Mở', '695_shop2.jpg'),
-(4, 'Cửa hàng 4', 'NVB', 'Mở', '556_3902627.jpg'),
-(5, 'Cửa hàng 5', 'PVD', 'Đóng', '1.png'),
-(7, 'Cửa Hàng 6', '12', 'Mở', '272_3873446.jpg');
+(1, 'Cửa hàng 1', 'NVB', 'Mở', '524_ch1.jpg'),
+(2, 'Cửa hàng 2', 'NVB', 'Mở', '273_ch2.jpg'),
+(3, 'Cửa hàng 3', 'NVB', 'Mở', '840_ch3.jpg'),
+(4, 'Cửa hàng 4', 'NVB', 'Mở', '526_ch4.jpg'),
+(5, 'Cửa hàng 5', 'PVD', 'Đóng', '377_ch5.jpg');
 
 -- --------------------------------------------------------
 
@@ -435,7 +434,19 @@ INSERT INTO `donhang` (`MaDon`, `GioTaoDon`, `TongTien`, `PhuongThucThanhToan`, 
 (30, '2024-12-11 07:16:32', 162000, 2, '', 'akali', '0367107659', '0', 3, 4, 1),
 (31, '2024-12-11 07:18:00', 242000, 1, '', 'khang ', '0367107659', '0', 3, 1, 1),
 (32, '2024-12-11 11:40:31', 79000, 1, '', 'Hong Tham', '0367107659', '147', 3, 1, 1),
-(33, '2024-12-11 15:28:14', 79000, 1, '', 'Hong Tham', '0367107659', '0', 3, 1, 1);
+(33, '2024-12-11 15:28:14', 79000, 1, '', 'Hong Tham', '0367107659', '0', 3, 1, 1),
+(34, '2024-10-16 19:41:14', 5500000, 1, 'không', 'a', '0999999999', 'pvd', 13, 1, 1),
+(35, '2024-09-17 19:43:35', 3000000, 1, 'khong', 'a', '099999999', 'nvb', 14, 1, 1),
+(36, '2024-08-14 19:44:20', 4000000, 1, 'a', 'b', '077777777', 'nk', 13, 1, 1),
+(37, '2024-07-19 19:45:13', 3000000, 1, NULL, NULL, NULL, NULL, 13, 1, 1),
+(38, '2024-06-04 19:46:32', 4300000, 1, NULL, NULL, NULL, NULL, 13, 1, 1),
+(39, '2024-12-12 13:47:07', 10000000, 1, NULL, NULL, NULL, NULL, 52, 5, 1),
+(40, '2024-02-14 19:49:14', 5000000, 1, NULL, NULL, NULL, NULL, 14, 1, 0),
+(41, '2024-03-30 19:49:14', 4000000, 1, NULL, NULL, NULL, NULL, 13, 1, 1),
+(42, '2024-12-12 13:50:44', 1000000, 1, NULL, NULL, NULL, NULL, 14, 1, 1),
+(43, '2024-04-10 19:50:45', 2000000, 1, NULL, NULL, NULL, NULL, 13, 1, 1),
+(44, '2024-04-27 19:51:44', 3000000, 1, NULL, NULL, NULL, NULL, 14, 1, 1),
+(45, '2024-01-17 19:52:43', 3000000, 1, NULL, NULL, NULL, NULL, 13, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1683,7 +1694,7 @@ ALTER TABLE `cuahang`
 -- AUTO_INCREMENT cho bảng `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `MaDon` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `MaDon` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT cho bảng `donnhaphang`
