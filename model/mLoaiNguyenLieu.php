@@ -42,8 +42,9 @@ class mloainguyenlieu{
         }
     }
 
+
     public function inserttype($tenloai)
-    {
+    { 
         $p = new clsKetNoi();
         $conn = $p->moKetNoi();
         if ($conn) {
@@ -65,7 +66,7 @@ class mloainguyenlieu{
         $p = new clsKetNoi();
         $conn = $p->moKetNoi();
         if ($conn) {
-            $str = "update loainguyenlieu set tenloai = '$Tenloai' where idloai = '$Idloai'";
+            $str = "update loainguyenlieu set TenLoaiNguyenLieu = '$Tenloai' where MaLoaiNguyenLieu = '$Idloai'";
             $result = $conn->query($str);
             $p->dongKetNoi($conn);
             if ($result) {

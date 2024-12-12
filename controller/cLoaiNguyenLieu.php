@@ -21,25 +21,21 @@ class cloainguyenlieu{
             return false;
         }
     }
-    public function updateth($math,$tenth,$diachi,$web,$dienthoai){
+    public function updateloainguyenlieu($math,$tenth){
         $p = new mloainguyenlieu();
-        return $p->updateloainguyenlieu($math,$tenth,$diachi,$web,$dienthoai);
+        return $p->updateloai($math,$tenth);
         
     }
-    public function insertth($tenth,$diachi,$web,$dienthoai){
+    public function insertloainguyenlieu($tenth){
         $p =  new mloainguyenlieu();
-        $result = $p->insertloainguyenlieu($tenth,$diachi,$web,$dienthoai);
+        $result = $p->inserttype($tenth);
         if($result == 1){
             return true;
         }else{
             return false;
         }
     }
-    public function deleteloainguyenlieu($math){
-        $p = new mloainguyenlieu();
-        return $p->deleteth($math);
-        
-    }
+    
 }
 
 

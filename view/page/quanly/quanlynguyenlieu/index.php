@@ -67,8 +67,10 @@ if(!$table){
 
 echo '<body>
         <div class=" qlnl ">
-            <h1 class="d-flex justify-content-center py-3 font-weight-bold">QUẢN LÝ NGUYÊN LIỆU</h1>
+
+            <h1 class="d-flex justify-content-center py-3 font-weight-bold">QUẢN LÝ NGUYÊN LIỆU </h1>
             <a href="index.php?page=quanly/quanlynguyenlieu/themnguyenlieu" class="d-flex justify-content-center ">Thêm nguyên liệu</a>
+            <a href="index.php?page=quanly/quanlynguyenlieu/quanlyloainguyenlieu" class="d-flex justify-content-center ">Quản lý loại nguyên liệu</a>
 
             <div class="qlnl-header justify-content-end py-3 container">
                 <div class="qlnl-search">
@@ -133,6 +135,8 @@ echo '<body>
             
             if ($maCV == "1") {  
                 echo '<a href="index.php?page=quanly/quanlynguyenlieu/themnguyenlieu" class="d-flex justify-content-center ">Thêm nguyên liệu</a>';
+            echo '<a href="index.php?page=quanly/quanlynguyenlieu/quanlyloainguyenlieu" class="d-flex justify-content-center ">Quản lý loại nguyên liệu</a>';
+
                     }
             elseif($maCV != "2") {  // Nếu là nhân viên, chỉ lấy bàn của cửa hàng mà nhân viên đó quản lý
             //    echo "<td> </td>";

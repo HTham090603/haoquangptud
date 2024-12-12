@@ -128,7 +128,7 @@ if (isset($_POST["btnThem"])) {
                <!-- </a> -->
                <!-- <a href="qlnl.html"> -->
 
-                   <button name="btnThem" class="btn btn-success" onclick="showConfirm()"><i class="far fa-save"></i> Lưu</button>
+                   <button name="btnThem" class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn thêm nguyên liệu không ')"><i class="far fa-save"></i> Lưu</button>
                <!-- </a> -->
             </div>
         </div>

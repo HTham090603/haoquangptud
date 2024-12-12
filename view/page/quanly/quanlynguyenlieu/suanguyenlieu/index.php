@@ -154,7 +154,7 @@ if($kq){
                        <!-- </a> -->
                        <!-- <a href="qlnl.html"> -->
         
-                           <button name = "submit"class="btn btn-success" onclick="showConfirm('Bạn có chắc chắn muốn sửa không?')"><i class="far fa-save"></i> Lưu</button>
+                           <button name = "submit"class="btn btn-success" onclick="return showConfirm('Bạn có chắc chắn muốn sửa không?')"><i class="far fa-save"></i> Lưu</button>
                        <!-- </a> -->
                     </div>
                 </div>
@@ -185,7 +185,7 @@ if(isset($_REQUEST["submit"])){
             }else
             echo "<script>alert('Upload ảnh thất bại')</script>";
         }else {
-            if($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],  $filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"])){
+            if($p->updatenguyenlieu($manl,$_REQUEST["TenNguyenLieu"],$filename_new, $_REQUEST["giamua"], $_REQUEST["maloainl"], $_REQUEST["dvt"])){
                 echo "<script>alert('bạn đã sửa thông tin thành công')</script>";
 
             }else{
@@ -210,3 +210,162 @@ if(isset($_REQUEST["submit"])){
     return confirm(message);
 }
 </script>
+   
+         
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener for checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="nguyen_lieu[]"]');
+        
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const quantityInput = document.getElementById('so_luong_' + this.value);
+                if (this.checked) {
+                    quantityInput.disabled = false;  // Enable the quantity input when checked
+                } else {
+                    quantityInput.disabled = true;  // Disable the quantity input when unchecked
+                }
+            });
+        });
+    });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Hàm để hiển thị thông báo lỗi
+    function showError(inputElement, message) {
+        const errorElement = document.createElement('small');
+        errorElement.classList.add('text-danger');
+        errorElement.textContent = message;
+
+        // Nếu đã có thông báo lỗi, không thêm nữa
+        if (inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('text-danger')) {
+            inputElement.nextElementSibling.textContent = message;
+        } else {
+            inputElement.parentNode.appendChild(errorElement);
+        }
+
+        inputElement.classList.add('is-invalid');  // Thêm lớp lỗi cho input
+    }
+
+    // Hàm để xóa thông báo lỗi
+    function removeError(inputElement) {
+        if (inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('text-danger')) {
+            inputElement.nextElementSibling.remove();
+        }
+        inputElement.classList.remove('is-invalid');
+    }
+
+    // Kiểm tra tên nguyên liệu
+    const tennl = document.querySelector('input[name="TenNguyenLieu"]');
+
+tennl.addEventListener('blur', function () {
+    // Lấy giá trị nhập vào và loại bỏ khoảng trắng ở đầu và cuối
+    const value = tennl.value.trim();
+
+    // Biểu thức chính quy kiểm tra chỉ chứa chữ cái và khoảng trắng
+    const regex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯàáâãèéêìíòóôõùúăđĩũơưÝýỳỵỷỹ\s]+$/;
+
+    if (!value) {
+        // Kiểm tra giá trị rỗng
+        showError(tennl, "Tên nguyên liệu không được rỗng.");
+    } else if (!regex.test(value)) {
+        // Kiểm tra ký tự không hợp lệ
+        showError(tennl, "Tên nguyên liệu chỉ được chứa chữ cái và khoảng trắng.");
+    } else {
+        // Xóa lỗi nếu không có vấn đề
+        removeError(tennl);
+    }
+});
+
+
+    // Kiểm tra Loại nguyên liệu
+    const maloainl = document.querySelector('select[name="maloainl"]');
+    maloainl.addEventListener('blur', function() {
+        if (!maloainl.value) {
+            showError(maloainl, "Loại nguyên liệu không được rỗng.");
+        } else {
+            removeError(maloainl);
+        }
+    });
+    //kiem tra don vi tinh
+    const dvt = document.querySelector('select[name="dvt"]');
+    dvt.addEventListener('blur', function() {
+        if (!dvt.value) {
+            showError(dvt, "Đơn vị tính không được rỗng.");
+        } else {
+            removeError(dvt);
+        }
+    });
+
+    // Kiểm tra Giá nguyên liệu
+    const giamua = document.querySelector('input[name="giamua"]');
+    giamua.addEventListener('blur', function() {
+        if (!giamua.value.trim() || giamua.value < 0) {
+            showError(giamua, "Giá nguyên liệu không được rỗng và không được âm.");
+        } else {
+            removeError(giamua);
+        }
+    });
+
+    
+
+    
+
+
+
+    // Kiểm tra trước khi gửi form
+    document.querySelector('form').addEventListener('submit', function (e) {
+        let isValid = true;
+
+        // Kiểm tra lại Tên nguyên liệu
+        if (!tennl.value.trim()) {
+            showError(tennl, "Tên nguyên liệu không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(tennl);
+        }
+
+        // Kiểm tra lại Loại nguyên liệu
+        if (!maloainl.value) {
+            showError(maloainl, "Loại nguyên liệu không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(maloainl);
+        }
+        // Kiểm tra lại dvt
+        if (!dvt.value) {
+            showError(dvt, "Đơn Vị Tính không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(dvt);
+        }
+        // Kiểm tra lại Giá nguyên liệu
+        if (!giamua.value.trim() || giamua.value < 0) {
+            showError(giamua, "Giá nguyên liệu không được rỗng và không được âm.");
+            isValid = false;
+        } else {
+            removeError(giamua);
+        }
+
+        
+        // Kiểm tra lại Hình ảnh
+        if (!hinhanh.files.length) {
+            showError(hinhanh, "Hình ảnh không được rỗng.");
+            isValid = false;
+        } else {
+            removeError(hinhanh);
+        }
+
+        if (!isValid) {
+        
+            alert('Sửa nguyên liệu thất bại. Vui lòng nhập đầy đủ!');
+            e.preventDefault();  // Ngừng gửi form nếu có lỗi
+            
+          
+        }
+    });
+});
+</script>
+
+
