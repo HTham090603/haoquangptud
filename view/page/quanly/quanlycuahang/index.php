@@ -52,7 +52,7 @@
                 <td>{$r['TenCuaHang']}</td>
                 <td>{$r['DiaChi']}</td>
                 <td>{$r['TinhTrang']}</td>
-                <td><img src='img/cuahang/{$r['HinhAnh']}' width='50px' alt='Hình ảnh cửa hàng'></td>
+                <td><img src='img/cuahang/{$r['HinhAnh']}' width='50px' height='50' alt='Hình ảnh cửa hàng'></td>
                 <td><a href='index.php?page=quanly/quanlycuahang/suacuahang&id={$r['MaCuaHang']}'><i class='fas fa-edit edit-icon'></i> Sửa</a></td>
             </tr>";
         }

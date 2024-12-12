@@ -29,6 +29,8 @@
         </div>
         <div class="h-nav">
           <a href="index.php">TRANG CHỦ  </a>
+         <a href="index.php?page=gioithieu">GIỚI THIỆU <i class="fas fa-store"></i></a>
+
           <a href="index.php?page=giohang">GIỎ HÀNG <i class='fas fa-shopping-cart'></i></a>
 
           <?php

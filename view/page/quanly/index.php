@@ -107,7 +107,7 @@ if($nguoiDung['MaChucVu'] == '1'){
                         </p>
                     </a>
                 </div>
-               
+             </div>  
         </div>
     </body>
     ';
